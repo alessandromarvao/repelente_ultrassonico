@@ -1,15 +1,24 @@
 #include <Arduino.h>
+#include "esp_sleep.h"
 #include <stdint.h>
 #include "buzzer.h"
 
-void play(uint8_t pin, uint16_t frequencia, uint8_t resolucao) {
-  ledcAttach(pin, frequencia, resolucao);
+/**
+* Toca o buzzer
+*/
+void play_buzzer(uint8_t pin, uint8_t frequencia) {
 
-  // Toca buzzer com 100% do volume
-  ledcWrite(pin, 256);
+  // Configura o buzzer para tocar a 25 kHz
+  ledcAttach(pin, frequencia, PWM_RES);
 
-  delay(300);
+  // Toca buzzer com 50% do volume
+  ledcWrite(pin, 128);
+
+  vTaskDelay(pdMS_TO_TICKS(300));
 
   // Desliga o buzzer
   ledcWrite(pin, 0);
+
+  // Pausa de 100 ms
+  vTaskDelay(pdMS_TO_TICKS(100));
 }

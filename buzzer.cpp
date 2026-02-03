@@ -6,10 +6,9 @@
 /**
 * Toca o buzzer
 */
-void play_buzzer(uint8_t pin, uint8_t frequencia) {
-
+void play_buzzer(uint8_t pin, uint32_t frequencia) {
   // Configura o buzzer para tocar a 25 kHz
-  ledcAttach(pin, frequencia, PWM_RES);
+  ledcChangeFrequency(pin, frequencia, PWM_RES);
 
   // Toca buzzer com 50% do volume
   ledcWrite(pin, 128);

@@ -1,7 +1,22 @@
 #include "params.h"
 #include "buzzer.h"
 
+void ledBlinkTask(void *pvParameters) {
+  pinMode(LED_PIN, OUTPUT);
+
+  while (1) {
+    digitalWrite(LED_PIN, HIGH);
+    vTaskDelay(pdMS_TO_TICKS(300));
+
+    digitalWrite(LED_PIN, LOW);
+    vTaskDelay(pdMS_TO_TICKS(300));
+  }
+}
+
 void buzzerTask(void *pvParameters) {
+  // Inicializa o PWM do buzzer
+  ledcAttach(BUZZER_PIN, FREQ_25, PWM_RES);
+
   // Toca o buzzer na frequência de 25 kHz
   play_buzzer(BUZZER_PIN, FREQ_25);
 
@@ -25,6 +40,18 @@ void buzzerTask(void *pvParameters) {
 }
 
 void setup() {
+  // LED piscando (core 0)
+  xTaskCreatePinnedToCore(
+    ledBlinkTask,
+    "LED Blink",
+    1024,
+    NULL,
+    1,
+    NULL,
+    0
+  );
+
+  // Buzzer (core 1)
   xTaskCreatePinnedToCore(
     buzzerTask,          // Função da task
     "Buzzer Task",       // Nome

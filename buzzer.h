@@ -6,6 +6,6 @@
 /**
 * Toca o buzzer
 */
-void play_buzzer(uint8_t pin, uint8_t frequencia);
+void play_buzzer(uint8_t pin, uint32_t frequencia);
 
 #endif
